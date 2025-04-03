@@ -133,9 +133,24 @@ public class HandleApplications {
     }
 
     public SortedMap<String, Long> skill_nApplicants() {
-        return null;
+        SortedMap<String, Long> skillCounts = new TreeMap<>();
+        for (Applicant applicant : applicants.values()) {
+            for (String skill : applicant.getSkills().keySet()) {
+                skillCounts.put(skill, skillCounts.getOrDefault(skill, 0L) + 1);
+            }
+        }
+        return skillCounts;
     }
     public String maxPosition() {
-        return null;
+        String maxPosition = null;
+        int maxApplicants = 0;
+        for (Position position : positions.values()) {
+            int applicantCount = position.getApplicants().size();
+            if (applicantCount > maxApplicants) {
+                maxApplicants = applicantCount;
+                maxPosition = position.getName();
+            }
+        }
+        return maxPosition;
     }
 }
