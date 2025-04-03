@@ -5,6 +5,7 @@ public class HandleApplications {
     final private Map<String, Skill> skills = new HashMap<>();
     final private Map<String, Position> positions = new HashMap<>();
     final private Map<String,Applicant> applicants = new HashMap<>();
+    final private Set<String>  appliedApplicants = new HashSet<>();
     public void addSkills(String... names) throws ApplicationException {
         for (String name: names){
             if(skills.containsKey(name)){
@@ -76,7 +77,7 @@ public class HandleApplications {
         List<String> sortedSkills = new ArrayList<>(skillLevels.keySet());
         Collections.sort(sortedSkills);
         for (String skill: sortedSkills){
-            if(capabilities.length() > 0){
+            if(!capabilities.isEmpty()){
                 capabilities.append(",");
             }
             capabilities.append(skill).append(":").append(skillLevels.get(skill));
@@ -85,6 +86,23 @@ public class HandleApplications {
     }
 
     public void enterApplication(String applicantName, String positionName) throws ApplicationException {
+        Applicant applicant = applicants.get(applicantName);
+        Position position = positions.get(positionName);
+
+        if(applicant == null || position == null){
+            throw new ApplicationException();
+        }
+        if(appliedApplicants.contains(applicantName)){
+            throw new ApplicationException();
+        }
+        Map<String, Integer> applicantSkills = applicant.getSkills();
+        for (Skill requiredSkill : position.getRequiredSkills()){
+            if (!applicantSkills.containsKey(requiredSkill.getName())){
+                throw new ApplicationException();
+            }
+        }
+        position.addApplicant(applicantName);
+        appliedApplicants.add(applicantName);
 
     }
 

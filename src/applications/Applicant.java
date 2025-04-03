@@ -13,4 +13,7 @@ public class Applicant {
     public Map<String, Integer> getSkills(){
         return skillLevels;
     }
+    public String getName(){
+        return this.name;
+    }
 }
