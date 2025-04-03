@@ -107,7 +107,29 @@ public class HandleApplications {
     }
 
     public int setWinner(String applicantName, String positionName) throws ApplicationException {
-        return 0;
+        Applicant applicant = applicants.get(applicantName);
+        Position position = positions.get(positionName);
+
+        if(applicant == null || position == null){
+            throw new ApplicationException();
+        }
+
+        if (!position.getApplicants().contains(applicantName)){
+            throw new ApplicationException();
+        }
+        if(position.getWinner() != null){
+            throw new ApplicationException();
+        }
+        int sumOfLevels = 0;
+        for (Skill requiredSkill : position.getRequiredSkills()) {
+            sumOfLevels += applicant.getSkills().getOrDefault(requiredSkill.getName(), 0);
+        }
+
+        if (sumOfLevels <= 6 * position.getRequiredSkills().size()) {
+            throw new ApplicationException();
+        }
+        position.setWinner(applicantName);
+        return sumOfLevels;
     }
 
     public SortedMap<String, Long> skill_nApplicants() {

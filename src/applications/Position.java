@@ -5,6 +5,7 @@ public class Position {
     final private String name;
     final private Set<Skill> requiredSkills;
     final private Set<String> applicants = new HashSet<>();
+    private String winner = null;
 
     public Position(String name, Set<Skill> requiredSkills){
         this.name = name;
@@ -24,11 +25,14 @@ public class Position {
         Collections.sort(sortedApplicants);
         return sortedApplicants;
     }
+    public void setWinner(String winner){
+        this.winner = winner;
+    }
     public String getName() {
         return this.name;
     }
 
     public String getWinner() {
-        return null;
+        return this.winner;
     }
 }
